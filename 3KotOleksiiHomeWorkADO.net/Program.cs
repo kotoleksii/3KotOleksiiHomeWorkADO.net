@@ -150,41 +150,46 @@ namespace _3KotOleksiiHomeWorkADO.net
                     switch (choice)
                     {
                         case "sql":
-
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write("Enter a query: ");
-                            Console.ResetColor();
-
-                            string query = "";
-                            query = Console.ReadLine();
-                            Console.Write("\n");
-                            Console.Clear();
-
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write("Your query: ");
-                            Console.ResetColor();
-                            Console.WriteLine($"{query}\n");
-
-                            SqlCommand command = new SqlCommand(query, connection);
-                            SqlDataReader reader = command.ExecuteReader();
-
-                            for (int i = 0; i < reader.FieldCount; i++)
+                            try
                             {
-                                Console.Write($"{reader.GetName(i)}\t");
-                            }
-                            Console.Write("\n");
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.Write("Enter a query: ");
+                                Console.ResetColor();
 
-                            while (reader.Read())
+                                string query = "";
+                                query = Console.ReadLine();
+                                Console.Write("\n");
+                                Console.Clear();
+
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.Write("Your query: ");
+                                Console.ResetColor();
+                                Console.WriteLine($"{query}\n");
+
+                                SqlCommand command = new SqlCommand(query, connection);
+                                SqlDataReader reader = command.ExecuteReader();
+
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    Console.Write($"{reader.GetName(i)}\t");
+                                }
+                                Console.Write("\n");
+
+                                while (reader.Read())
+                                {
+                                    for (int i = 0; i < reader.FieldCount; ++i)
+                                        Console.Write($"{reader[i]}\t");
+                                    Console.WriteLine();
+                                }
+                                Console.Write("\n");
+
+                                if (reader != null)
+                                    reader.Close();
+                            }
+                            catch (SqlException ex)
                             {
-                                for (int i = 0; i < reader.FieldCount; ++i)
-                                    Console.Write($"{reader[i]}\t");
-                                Console.WriteLine();
+                                DisplaySqlErrors(ex);
                             }
-                            Console.Write("\n");
-
-                            if (reader != null)
-                                reader.Close();
-
                             break;
                         case "endl":
                             work = false;
@@ -388,6 +393,21 @@ namespace _3KotOleksiiHomeWorkADO.net
             Console.Write("\nAll done. Press any key to finish...");
             Console.ResetColor();
             Console.ReadKey(true);
+            Console.Clear();
+        }
+
+        private static void DisplaySqlErrors(SqlException exception)
+        {
+            for (int i = 0; i < exception.Errors.Count; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Index #" + i + "\n" +
+                    "Error: " + exception.Errors[i].ToString() + "\n");
+            }
+
+            Console.Write("Press any key to continue...");
+            Console.ResetColor();
+            Console.ReadLine();
             Console.Clear();
         }
     }
