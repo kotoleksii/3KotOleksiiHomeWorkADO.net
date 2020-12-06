@@ -58,8 +58,7 @@ namespace _3KotOleksiiHomeWorkADO.net
                     case "exit":                                              
                         work = false;
                         break;
-                    default:
-                       
+                    default:                 
                         break;
                 }
             } while (work);       
@@ -91,15 +90,14 @@ namespace _3KotOleksiiHomeWorkADO.net
 
             //Console.Write("\nAll done. Press any key to finish...");
             Console.ReadKey(true);
-
             Console.Clear();
         }
 
         static void dbDisconnection()
         {
             Console.Clear();
-
             Console.Write($"Disconnecting SQL Server {serverName}... ");
+
             try
             {
                 if (connection != null)
@@ -121,7 +119,6 @@ namespace _3KotOleksiiHomeWorkADO.net
             Console.ResetColor();
 
             Console.ReadKey(true);
-
             Console.Clear();
         }
 
@@ -166,8 +163,8 @@ namespace _3KotOleksiiHomeWorkADO.net
                                 Console.ResetColor();
                                 Console.WriteLine($"{query}\n");
 
-                                SqlCommand command = new SqlCommand(query, connection);
-                                SqlDataReader reader = command.ExecuteReader();
+                                var command = new SqlCommand(query, connection);
+                                var reader = command.ExecuteReader();
 
                                 for (int i = 0; i < reader.FieldCount; i++)
                                 {
@@ -334,7 +331,7 @@ namespace _3KotOleksiiHomeWorkADO.net
                 Console.Write("Your procedure: "); Console.ResetColor();
                 Console.WriteLine($"{procedure}\n");
 
-                SqlCommand cmd = new SqlCommand(procedure, connection);
+                var cmd = new SqlCommand(procedure, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@userEmail", SqlDbType.NVarChar).Value = email;
